@@ -1,0 +1,567 @@
+{
+  "name": "Certification",
+  "label": "在职/收入证明",
+  "titleFormat": "【在职/收入证明】{0}的申请",
+  "titleArguments": [
+    "Applicant__c"
+  ],
+  "handleClassName": "EnvCertificationProcessHandler",
+  "steps": {
+    "step0": {
+      "title": "创建申请",
+      "approverType": "Owner",
+      "conditions": [],
+      "requireds": [
+        "certificateType",
+        "formatType"
+      ],
+      "schema": {
+        "name": "Certification",
+        "label": "在职/收入证明（申请）",
+        "component": "process",
+        "targetHandler": "EnvProcessViewHandler",
+        "items": [
+          {
+            "label": "在职/收入证明",
+            "component": "header",
+            "items": [
+              {
+                "name": "cancel",
+                "label": "取消",
+                "component": "button",
+                "conditions": [
+                  "Status__c = DRAFT"
+                ],
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ],
+                "onclick": [
+                  {
+                    "targetHandler": "EnvProcessViewHandler",
+                    "params": {
+                      "operationType": "REMOVE",
+                      "handleClassName": "EnvCertificationProcessHandler"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "save",
+                "label": "保存",
+                "component": "button",
+                "conditions": [
+                  "Status__c = DRAFT"
+                ],
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ],
+                "onclick": [
+                  {
+                    "targetHandler": "EnvProcessViewHandler",
+                    "params": {
+                      "operationType": "SAVE",
+                      "handleClassName": "EnvCertificationProcessHandler"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "submit",
+                "label": "提交",
+                "component": "button",
+                "conditions": [
+                  "Status__c = DRAFT"
+                ],
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ],
+                "onclick": [
+                  {
+                    "targetHandler": "EnvProcessViewHandler",
+                    "params": {
+                      "operationType": "SUBMIT",
+                      "handleClassName": "EnvCertificationProcessHandler"
+                    }
+                  }
+                ]
+              }
+            ],
+            "name": "header",
+            "editabledConditions": [
+              "Status__c = DRAFT"
+            ]
+          },
+          {
+            "label": "证明类型",
+            "component": "formNormal",
+            "items": [
+              {
+                "label": "证明类型",
+                "component": "select",
+                "options": [
+                  {
+                    "value": "Income",
+                    "label": "收入证明"
+                  },
+                  {
+                    "value": "Employeement",
+                    "label": "在职证明（不含薪资）"
+                  },
+                  {
+                    "value": "Visa4Tourism",
+                    "label": "个人旅游签证证明"
+                  },
+                  {
+                    "value": "Visa4Business",
+                    "label": "因公出差签证证明"
+                  }
+                ],
+                "name": "certificateType",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ],
+                "required": true,
+                "trigger": true
+              },
+              {
+                "label": "格式",
+                "component": "radioGroup",
+                "options": [
+                  {
+                    "value": "Predefined",
+                    "label": "公司模板"
+                  },
+                  {
+                    "value": "External",
+                    "label": "外部模板(需上传附件)"
+                  }
+                ],
+                "name": "formatType",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ],
+                "required": true,
+                "trigger": true
+              },
+              {
+                "label": "收入证明",
+                "component": "radioGroup",
+                "options": [
+                  {
+                    "value": "MonthlyPreTax",
+                    "label": "月收入（税前）"
+                  },
+                  {
+                    "value": "MonthlyAfterTax",
+                    "label": "月收入（税后）"
+                  },
+                  {
+                    "value": "YearlyPreTax",
+                    "label": "年收入（税前）"
+                  },
+                  {
+                    "value": "YearlyAfterTax",
+                    "label": "年收入（税后）"
+                  }
+                ],
+                "name": "incomeCertificationType",
+                "conditions": [
+                  "certificateType = Income"
+                ],
+                "editabledConditions": [
+                  "Status__c = Draft"
+                ]
+              },
+              {
+                "label": "证明份数",
+                "component": "select",
+                "options": [
+                  {
+                    "value": "1",
+                    "label": "1"
+                  },
+                  {
+                    "value": "2",
+                    "label": "2"
+                  },
+                  {
+                    "value": "3",
+                    "label": "3"
+                  },
+                  {
+                    "value": "4",
+                    "label": "4"
+                  },
+                  {
+                    "value": "5",
+                    "label": "5"
+                  }
+                ],
+                "name": "count",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ]
+              }
+            ],
+            "name": "form1",
+            "editabledConditions": [
+              "Status__c = DRAFT"
+            ]
+          },
+          {
+            "label": "",
+            "component": "formNormal",
+            "conditions": [
+              "(certificateType = Visa4Tourism) OR (certificateType = Visa4Business)"
+            ],
+            "items": [
+              {
+                "name": "passportNumber",
+                "label": "护照号码",
+                "component": "input",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ]
+              },
+              {
+                "label": "前往国家",
+                "component": "input",
+                "name": "visitingCountry",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ],
+                "trigger": true
+              },
+              {
+                "label": "出行起止时间",
+                "component": "date",
+                "name": "visitingStartDate",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ]
+              },
+              {
+                "label": "至",
+                "component": "date",
+                "name": "visitingEndDate",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ]
+              }
+            ],
+            "name": "form2",
+            "editabledConditions": [
+              "Status__c = DRAFT"
+            ]
+          },
+          {
+            "label": "附件",
+            "component": "formNormal",
+            "items": [
+              {
+                "label": "上传附件",
+                "component": "FileUploadCmp",
+                "name": "attachment",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ],
+                "trigger": true
+              }
+            ],
+            "name": "attachmentLayout",
+            "editabledConditions": [
+              "Status__c = DRAFT"
+            ]
+          },
+          {
+            "label": "备注",
+            "component": "formSingle",
+            "items": [
+              {
+                "label": "预览附件",
+                "component": "FileUploadCmp",
+                "name": "preview",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ]
+              },
+              {
+                "label": "申请说明",
+                "component": "textarea",
+                "name": "comment",
+                "editabledConditions": [
+                  "Status__c = DRAFT"
+                ]
+              }
+            ],
+            "name": "commentLayout",
+            "editabledConditions": [
+              "Status__c = DRAFT"
+            ]
+          },
+          {
+            "name": "Histories__c",
+            "label": "历史记录",
+            "component": "historyList",
+            "editabledConditions": [
+              "Status__c = DRAFT"
+            ]
+          }
+        ],
+        "requireds": [
+          "certificateType",
+          "formatType"
+        ],
+        "triggers": [
+          "certificateType",
+          "formatType",
+          "visitingCountry",
+          "attachment"
+        ]
+      }
+    },
+    "step_HR": {
+      "title": "HR审批",
+      "approverType": "HR",
+      "conditions": [
+        "(Status__c = INPROCESS) AND (step0 = SUBMIT)"
+      ],
+      "schema": {
+        "name": "Certification",
+        "label": "在职/收入证明（审批）",
+        "component": "process",
+        "targetHandler": "EnvProcessViewHandler",
+        "items": [
+          {
+            "label": "在职/收入证明(审批)",
+            "component": "header",
+            "items": [
+              {
+                "name": "reject",
+                "label": "拒绝",
+                "component": "button",
+                "conditions": [
+                  "Status__c = INPROCESS"
+                ],
+                "onclick": [
+                  {
+                    "targetHandler": "EnvProcessViewHandler",
+                    "params": {
+                      "operationType": "REJECT",
+                      "handleClassName": "EnvCertificationProcessHandler"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "reassign",
+                "label": "转审",
+                "component": "button",
+                "conditions": [
+                  "Status__c = INPROCESS"
+                ],
+                "onclick": [
+                  {
+                    "targetHandler": "COMPONENT",
+                    "params": {
+                      "componentName": "c:BPApprovalReassignCmp",
+                      "attrs": {
+                        "taskId": "$TaskId__c"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "approve",
+                "label": "同意",
+                "component": "button",
+                "conditions": [
+                  "Status__c = INPROCESS"
+                ],
+                "onclick": [
+                  {
+                    "targetHandler": "CHANGE_DATA",
+                    "params": {
+                      "Status__c": "CLOSED"
+                    }
+                  },
+                  {
+                    "targetHandler": "EnvProcessViewHandler",
+                    "params": {
+                      "handleClassName": "EnvCertificationProcessHandler",
+                      "operationType": "APPROVE"
+                    }
+                  }
+                ]
+              }
+            ],
+            "name": "header_approver"
+          },
+          {
+            "label": "证明类型",
+            "component": "formNormal",
+            "items": [
+              {
+                "label": "证明类型",
+                "component": "select",
+                "options": [
+                  {
+                    "value": "Income",
+                    "label": "收入证明"
+                  },
+                  {
+                    "value": "Employeement",
+                    "label": "在职证明（不含薪资）"
+                  },
+                  {
+                    "value": "Visa4Tourism",
+                    "label": "个人旅游签证证明"
+                  },
+                  {
+                    "value": "Visa4Business",
+                    "label": "因公出差签证证明"
+                  }
+                ],
+                "name": "certificateType"
+              },
+              {
+                "label": "格式",
+                "component": "radioGroup",
+                "options": [
+                  {
+                    "value": "Predefined",
+                    "label": "公司模板"
+                  },
+                  {
+                    "value": "External",
+                    "label": "外部模板(需上传附件)"
+                  }
+                ],
+                "name": "formatType"
+              },
+              {
+                "label": "收入证明",
+                "component": "radioGroup",
+                "options": [
+                  {
+                    "value": "MonthlyPreTax",
+                    "label": "月收入（税前）"
+                  },
+                  {
+                    "value": "MonthlyAfterTax",
+                    "label": "月收入（税后）"
+                  },
+                  {
+                    "value": "YearlyPreTax",
+                    "label": "年收入（税前）"
+                  },
+                  {
+                    "value": "YearlyAfterTax",
+                    "label": "年收入（税后）"
+                  }
+                ],
+                "name": "incomeCertificationType",
+                "conditions": [
+                  "certificateType = Income"
+                ]
+              },
+              {
+                "label": "证明份数",
+                "component": "select",
+                "options": [
+                  {
+                    "value": "1",
+                    "label": "1"
+                  },
+                  {
+                    "value": "2",
+                    "label": "2"
+                  },
+                  {
+                    "value": "3",
+                    "label": "3"
+                  },
+                  {
+                    "value": "4",
+                    "label": "4"
+                  },
+                  {
+                    "value": "5",
+                    "label": "5"
+                  }
+                ],
+                "name": "count"
+              }
+            ],
+            "name": "form1"
+          },
+          {
+            "label": "",
+            "component": "formNormal",
+            "conditions": [
+              "(certificateType = Visa4Tourism) OR (certificateType = Visa4Business)"
+            ],
+            "items": [
+              {
+                "name": "passportNumber",
+                "label": "护照号码",
+                "component": "input"
+              },
+              {
+                "label": "前往国家",
+                "component": "input",
+                "name": "visitingCountry"
+              },
+              {
+                "label": "出行起止时间",
+                "component": "date",
+                "name": "visitingStartDate"
+              },
+              {
+                "label": "至",
+                "component": "date",
+                "name": "visitingEndDate"
+              }
+            ],
+            "name": "form2"
+          },
+          {
+            "label": "附件",
+            "component": "formNormal",
+            "items": [
+              {
+                "label": "上传附件",
+                "component": "FileUploadCmp",
+                "name": "attachment"
+              }
+            ],
+            "name": "attachmentLayout"
+          },
+          {
+            "label": "备注",
+            "component": "formSingle",
+            "items": [
+              {
+                "label": "预览附件",
+                "component": "FileUploadCmp",
+                "name": "preview"
+              },
+              {
+                "label": "申请说明",
+                "component": "textarea",
+                "name": "comment"
+              }
+            ],
+            "name": "commentLayout"
+          },
+          {
+            "name": "Histories__c",
+            "label": "历史记录",
+            "component": "historyList"
+          }
+        ]
+      }
+    }
+  }
+}
